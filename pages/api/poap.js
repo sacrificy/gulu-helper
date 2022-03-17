@@ -4,20 +4,34 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
 puppeteer.use(StealthPlugin())
 
-const browser = await puppeteer.launch({ headless: false })
-console.log('浏览器启动')
-// await page.waitFor('input')
-// page.type('input', '0xf313E6C1d64f8cc830137F48b6885d90fdEB3218')
-// await page.waitForTimeout(1000)
-// page.click('[type=submit]')
-// await page.waitForTimeout(5000)
-// await page.screenshot({ path: 'testresult.png', fullPage: true })
-// await browser.close()
-
 export default async function handler(req, res) {
-  const page = await browser.newPage()
-  await page.goto('https://poap.delivery/cryptogsmarch2022')
-  await page.waitForTimeout(5000)
-  // await page.close()
-  res.status(200).json({ name: 'John Doe' })
+  const param = req.body;
+  const {
+    link,
+    address
+  } = param;
+  puppeteer.launch({
+    headless: false,
+    executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    args: ['--proxy-server=us.proxy.iproyal.com:12323']
+  }).then(async browser => {
+    try {
+      const page = await browser.newPage()
+      await page.authenticate({
+        username: 'gulu',
+        password: '951012_country-us'
+      });
+      await page.goto(link)
+      await page.waitFor('input');
+      await page.type('input', address);
+      await page.waitForTimeout(500);
+      await page.waitFor('button:not([disabled])');
+      await page.click('button:not([disabled])');
+      await browser.close()
+      res.status(200).json({ name: '成功' })
+    } catch (error) {
+      await browser.close();
+      res.status(500).json(error)
+    }
+  })
 }

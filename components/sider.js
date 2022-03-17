@@ -3,6 +3,7 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
+import Link from 'next/link';
 
 const { Sider } = Layout;
 
@@ -22,10 +23,14 @@ export default function CommonSider() {
         <div className="logo" />
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
           <Menu.Item key="1" icon={<UserOutlined />}>
-            1
+            <Link href="/">
+              钱包生成
+            </Link>
           </Menu.Item>
           <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-            2
+            <Link href="/poap">
+              Poap助手
+            </Link>
           </Menu.Item>
         </Menu>
       </Sider>
