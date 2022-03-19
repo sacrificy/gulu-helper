@@ -1,0 +1,6 @@
+{
+  "headless": true,
+  "proxyRegoin": "US",
+  "executablePath": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "userDataDirBase": "F:/chromeAcc/profile/"
+}

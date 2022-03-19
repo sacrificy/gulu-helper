@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     address
   } = param;
   puppeteer.launch({
-    headless: false,
+    headless: true,
     executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe",
     args: ['--proxy-server=us.proxy.iproyal.com:12323']
   }).then(async browser => {

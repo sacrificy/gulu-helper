@@ -14,7 +14,6 @@ const addressList = [
 export default function Home() {
   const [link, setLink] = useState('')
   const handleClick = (address) => {
-    console.log(link)
     axios.post('/api/poap', {
       link: link,
       address: address
