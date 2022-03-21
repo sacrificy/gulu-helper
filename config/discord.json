@@ -1,1 +1,20 @@
-{"account":[{"token":"555","mail":"777","note":"888"},{"token":"111","mail":"153333"}]}
+{
+  "account": [
+    {
+      "mail": "test",
+      "token": "",
+      "note": "测试",
+      "proxyIndex": 1,
+      "loginType": "manual",
+      "isLogin": true
+    },
+    {
+      "mail": "Vaganova12.f@mail.ru",
+      "token": "",
+      "note": "",
+      "proxyIndex": 2,
+      "loginType": "token",
+      "isLogin": true
+    }
+  ]
+}

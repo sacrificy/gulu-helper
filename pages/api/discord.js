@@ -14,18 +14,25 @@ export default async function handler(req, res) {
   } = req.body;
   const {
     token,
-    mail
+    mail,
+    loginType,
+    proxyIndex
   } = accountItem
   // 判断是否登录过
-  const tokenList = disord.account.map(item => item.token);
-  if (tokenList.includes(accountItem.token)) {
-    res.status(200).json({ message: "已登录" })
-    return
+  const mailList = disord.account.map(item => item.mail);
+  if (mailList.includes(accountItem.mail)) {
+    return res.status(200).json({ message: "已登录" })
   }
+  // 手动登录
+  if (loginType === "manual") {
+    disord.account.push(accountItem);
+    fs.writeFileSync('./config/discord.json', JSON.stringify(disord));
+    return res.status(200).json({ message: '录入成功，请手动操作' })
+  }
+  // token登录
   try {
-    // 开始登录
-    const index = disord.account.length
-    const proxyItem = proxy[global.proxyRegoin]["sticky_24"][index]
+    const proxyItem = proxy[global.proxyRegoin]["sticky_24"][proxyIndex - 1]
+    console.log(proxyItem)
     const [host, port, username, password] = proxyItem.split(":")
     const browser = await puppeteer.launch({
       headless: global.headless,
@@ -39,19 +46,24 @@ export default async function handler(req, res) {
       password: password
     });
     await page.goto("https://discord.com/login")
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1000)
     await page.evaluate((token) => {
       window.t = token;
       window.localStorage = document.body.appendChild(document.createElement`iframe`).contentWindow.localStorage;
       window.setInterval(() => window.localStorage.token = `"${window.t}"`);
       window.location.reload();
     }, token)
+    await page.waitForTimeout(1000)
+    if (page.url() === "https://discord.com/login") {
+      await browser.close()
+      return res.status(200).json({ message: 'token登录失败' })
+    }
     await browser.close()
     // 保存登陆成功账号
     disord.account.push(accountItem);
     fs.writeFileSync('./config/discord.json', JSON.stringify(disord));
-    res.status(200).json({ message: '登录成功' })
+    return res.status(200).json({ message: 'token登录成功' })
   } catch (error) {
-    res.status(500).json({ message: '登录失败', error })
+    return res.status(500).json({ message: '登录失败', error })
   }
 }
