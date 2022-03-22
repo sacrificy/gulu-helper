@@ -38,6 +38,11 @@ export default function CommonSider() {
               Discord助手
             </Link>
           </Menu.Item>
+          <Menu.Item key="4" icon={<MessageOutlined />}>
+            <Link href="/google">
+              谷歌验证码
+            </Link>
+          </Menu.Item>
         </Menu>
       </Sider>
     </Layout>

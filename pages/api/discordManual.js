@@ -26,7 +26,7 @@ export default async function handler(req, res) {
       username: username,
       password: password
     });
-    await page.goto("https://discord.com/login")
+    await page.goto("https://discord.com/channels/@me")
     return res.status(200).json({ message: '成功，请在服务器手动操作' })
   } catch (error) {
     return res.status(500).json({ message: '失败', error })
